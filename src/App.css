@@ -1,38 +1,98 @@
+body {
+  height: 100%;
+  margin: 0;
+  background-color:lightblue;
+  font-family: 'Quicksand', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .App {
-  text-align: center;
+  width: 100%;
+  min-height: 100%;
+  color: white;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+}
+.container2 {
+  display: flex;
+  flex-wrap: wrap; /* pour passer a la ligne automatiquement  sur petit ecran */
+  margin-bottom: 2rem;
+}
+form {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+label {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 2.5px;
+  font-size: 0.9rem;
+  font-weight: 900;
+}
+.input {
+  background-color: lightblue;
+  font-weight: 900;
+  padding-left: 0.25rem;
+  width: 90%;
+  border-radius: 5px;
+  border: 2px solid white;
 }
 
-.App-link {
-  color: #61dafb;
+.identity, 
+.address {
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 1rem 1rem;
+  min-width: 300px;
+  margin: 10px;
+  padding: 5px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.identity {
+  margin-right: 1rem;
+}
+
+.department {
+  margin-left: 1rem;
+  padding-bottom: 2rem;
+  max-height: 15rem;
+}
+
+.identity, 
+.address {
+  min-height: 16rem;
+}
+
+.link {
+  text-decoration: none;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 0.25rem 1rem;
+  color: lightblue;
+  font-weight: 500;
+  background-color: white;
+}
+
+button {
+  cursor: pointer;
+  font-family: 'Quicksand', sans-serif;
+  background-color: white;
+  border-radius: 10px;
+  color: lightblue;
+  border: 2px solid white;
+  margin-top: 2rem;
+  font-size: 1.5rem;
+  font-weight: 900;
+  padding: 0rem 1rem;
+  border-radius: 10px;
 }
