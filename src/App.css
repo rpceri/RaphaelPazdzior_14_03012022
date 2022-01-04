@@ -1,7 +1,7 @@
 body {
   height: 100%;
   margin: 0;
-  background-color:lightblue;
+  background-color:#93AD18;
   font-family: 'Quicksand', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -40,7 +40,7 @@ label {
   font-weight: 900;
 }
 .input {
-  background-color: lightblue;
+  background-color: #f2f7dc;
   font-weight: 900;
   padding-left: 0.25rem;
   width: 90%;
@@ -55,7 +55,7 @@ label {
   padding: 1rem 1rem;
   min-width: 300px;
   margin: 10px;
-  padding: 5px;
+  padding: 5px 5px 15px 5px;
 }
 
 .identity {
@@ -76,10 +76,9 @@ label {
 .link {
   text-decoration: none;
   border: 2px solid white;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 0.25rem 1rem;
-  color: lightblue;
-  font-weight: 500;
+  color: #93AD18;
   background-color: white;
 }
 
@@ -88,11 +87,17 @@ button {
   font-family: 'Quicksand', sans-serif;
   background-color: white;
   border-radius: 10px;
-  color: lightblue;
+  color: #93AD18;
   border: 2px solid white;
   margin-top: 2rem;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 900;
   padding: 0rem 1rem;
-  border-radius: 10px;
+  border-radius: 8px;
+}
+
+button:hover {
+  color: #8ba11a;
+  background-color: #f6ffc8;
+  border: 2px solid #8ba11a; 
 }
