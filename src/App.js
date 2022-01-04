@@ -4,7 +4,6 @@ import RoutesApp from './RoutesApp.js';
 
 function App() {
 
-
   return (
     <div className="App">
       <RoutesApp />

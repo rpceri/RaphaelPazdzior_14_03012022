@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import db from '../firebaseConfig.js';
+import { collection, addDoc } from 'firebase/firestore/lite';
 
 /**
  * Return template of home page
@@ -74,20 +76,18 @@ function PageIndex() {
         {"name": "Wyoming", "abbreviation": "WY"}
     ];
     
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
+    const [firstName, setFirstName] = useState('First name');
+    const [lastName, setLastName] = useState('Last name');
     const [birthDate, setBirthDate] = useState(new Date());
     const [startDate, setStartDate] = useState(new Date());
-    const [street, setStreet] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-    const [zip, setZip] = useState('');
-    const [department, setDepartment] = useState('');
+    const [street, setStreet] = useState('the street');
+    const [city, setCity] = useState('the city');
+    const [state, setState] = useState('State');
+    const [zip, setZip] = useState('42230');
+    const [department, setDepartment] = useState('42');
 
     const [error, setError] = useState(false);
     const [addEmployeeMessage, setAddEmployeeMessage] = useState('');
-
-    const [isVisible, setIsVisibile] = useState(false);
 
 
     const [firstNameError, setFirstNameError] = useState('');
@@ -136,24 +136,45 @@ function PageIndex() {
     const handleSubmit = (e) => {
         if (validate()) {
             e.preventDefault();
-
-
-            setFirstNameError('');
-            setLastNameError('');
-            setSteetError('');
-            setCityError('');
-            setStateError('');
-            setZipError('');
-            setDepartmentError('');
-
-            setFirstName('');
-            setLastName('');
-            setStreet('');
-            setCity('');
-            setZip(0);
+            recordDatas()
         }
     }
 
+    async function recordDatas() {
+    try {
+        let collRef = await collection(db, 'employee')
+        await addDoc(collRef, {
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            startDate: startDate,
+            street: street,
+            city: city,
+            state: state,
+            zip: zip,
+            department: department
+        });
+        console.log("addDoc called");
+        setAddEmployeeMessage(`${firstName}  ${lastName} added`);
+    } catch (error) {
+        console.log('pb add collection', error)
+        setError(true);
+    }
+
+    setFirstNameError('');
+    setLastNameError('');
+    setSteetError('');
+    setCityError('');
+    setStateError('');
+    setZipError('');
+    setDepartmentError('');
+
+    setFirstName('');
+    setLastName('');
+    setStreet('');
+    setCity('');
+    setZip(0);
+    }
     return ( 
     <>
         <div className="title">
@@ -188,6 +209,7 @@ function PageIndex() {
                     {cityError ? <div className="form-error">{cityError}</div> : null}
 
                     <label htmlFor="state">State</label>
+                    <input id='state' className='input' type="text" value={state} onChange={(event) => setState(event.target.value)} />
                     {stateError ? <div className="form-error">{stateError}</div> : null}
 
                     <label htmlFor="zip-code">Zip Code</label>
@@ -195,12 +217,14 @@ function PageIndex() {
                     {zipError ? <div className="form-error">{zipError}</div> : null}
 
                     <label htmlFor="department">Department</label>
-                    <input id='department-code' className='input' type="number" value={{department}} onChange={(event) => setDepartment(event.target.value)} />
+                    <input id='department-code' className='input' type="number" value={department} onChange={(event) => setDepartment(event.target.value)} />
                     {departmentError ? <div className="form-error">{departmentError}</div> : null}
 
                 </div>
             </form>
             <button onClick={handleSubmit}>Save</ button>
+            {addEmployeeMessage}
+            {error }
         </div>
 
     </>
