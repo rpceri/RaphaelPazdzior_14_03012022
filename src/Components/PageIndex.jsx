@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import db from '../firebaseConfig.js';
 import { collection, addDoc } from 'firebase/firestore/lite';
 
@@ -152,7 +155,8 @@ function PageIndex() {
             city: city,
             state: state,
             zip: zip,
-            department: department
+            department: department,
+            insertionDate: new Date()
         });
         console.log("addDoc called");
         setAddEmployeeMessage(`${firstName}  ${lastName} added`);
@@ -194,9 +198,10 @@ function PageIndex() {
                     {lastNameError ? <div className="form-error">{lastNameError}</div> : null}
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
-
+                    <DatePicker selected={birthDate} onChange={(date) => setBirthDate(date)} />
                     
                     <label htmlFor="start-date">Start Date</label>
+                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
  
                 </div>
                 <div className="address">
