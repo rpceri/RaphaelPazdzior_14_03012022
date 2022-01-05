@@ -9,7 +9,7 @@
         <BrowserRouter>
             <Routes>
                 <Route exact path="/" element={<PageIndex />}></Route>
-                <Route path="/employees" element={<PageEmployees />}></Route>
+                <Route path="/employeeList" element={<PageEmployees />}></Route>
             </Routes>
         </BrowserRouter>
 
