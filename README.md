@@ -13,6 +13,7 @@ Convert https://github.com/OpenClassrooms-Student-Center/P12_Front-end/ using Re
 
 -    "rc-dropdown": "^3.2.0",
 -    "rc-menu"
+-    "react-table": "^7.7.0" and "styled-components": "^5.3.3", and "match-sorter": "^4.0.0",
 
 ## Data sources
 

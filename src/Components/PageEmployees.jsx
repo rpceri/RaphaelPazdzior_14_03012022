@@ -1,30 +1,269 @@
 import React from 'react'
+import styled from 'styled-components'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
+// A great library for fuzzy filtering/sorting items
+import matchSorter from 'match-sorter'
 
+import { useSortBy } from 'react-table'
+
+import getData from './getData'
 import { useEffect, useState } from 'react';
 
-import db from '../firebaseConfig.js';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { NavLink } from "react-router-dom";
 
-import { useTable, useSortBy } from 'react-table'
+const Styles = styled.div`
+  padding: 1rem;
 
-/**
- * Return template of employee's page where we see alloff them in a sheet
- *
- * @component
- * @summary imported in Route
- * @param {  }
- * @return { HTMLElement }
-*/
- function  PageEmployees() {
-    const [arrayOfObjectsOfEmplyees, setObjectsOfEmplyees] = useState([]);
-    const data = React.useMemo(() =>arrayOfObjectsOfEmplyees)
-    //console.log('data :', data )
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
 
-    const columns = React.useMemo(
-    () => [ 
-        { 
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+
+      :last-child {
+        border-right: 0;
+      }
+    }
+  }
+`
+
+// Define a default UI for filtering
+function GlobalFilter({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+}) {
+  const count = preGlobalFilteredRows.length
+  const [value, setValue] = React.useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 200)
+
+  return (
+    <span>
+      Search:{' '}
+      <input
+        value={value || ""}
+        onChange={e => {
+          setValue(e.target.value);
+          onChange(e.target.value);
+        }}
+        placeholder={`${count} records...`}
+        style={{
+          fontSize: '1.1rem',
+          border: '0',
+        }}
+      />
+    </span>
+  )
+}
+
+// Define a default UI for filtering
+function DefaultColumnFilter({
+  column: { filterValue, preFilteredRows, setFilter },
+}) {
+  const count = preFilteredRows.length
+
+  return (
+    <input
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+      }}
+      placeholder={`Search ${count} records...`}
+    />
+  )
+}
+
+// This is a custom filter UI for selecting
+// a unique option from a list
+function SelectColumnFilter({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}) {
+  // Calculate the options for filtering
+  // using the preFilteredRows
+  const options = React.useMemo(() => {
+    const options = new Set()
+    preFilteredRows.forEach(row => {
+      options.add(row.values[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
+
+  // Render a multi-select box
+  return (
+    <select
+      value={filterValue}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+    >
+      <option value="">All</option>
+      {options.map((option, i) => (
+        <option key={i} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
+
+
+
+function fuzzyTextFilterFn(rows, id, filterValue) {
+  return matchSorter(rows, filterValue, { keys: [row => row.values[id]] })
+}
+
+// Let the table remove the filter if the string is empty
+fuzzyTextFilterFn.autoRemove = val => !val
+
+// Our table component
+function Table({ columns, data }) {
+//console.log(data)
+  const filterTypes = React.useMemo(
+    () => ({
+      // Add a new fuzzyTextFilterFn filter type.
+      fuzzyText: fuzzyTextFilterFn,
+      // Or, override the default text filter to use
+      // "startWith"
+      text: (rows, id, filterValue) => {
+        return rows.filter(row => {
+          const rowValue = row.values[id]
+          return rowValue !== undefined
+            ? String(rowValue)
+                .toLowerCase()
+                .startsWith(String(filterValue).toLowerCase())
+            : true
+        })
+      },
+    }),
+    []
+  )
+
+  const defaultColumn = React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
+
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data,
+      defaultColumn, // Be sure to pass the defaultColumn option
+      filterTypes,
+    },
+    useFilters, // useFilters!
+    useGlobalFilter, // useGlobalFilter!
+    useSortBy
+  )
+
+  // We don't want to render all of the rows for this example, so cap
+  // it for this use case
+  const firstPageRows = rows.slice(0, 10)
+
+  return (
+    <>
+      <table {...getTableProps()}>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render('Header')}
+                  <span>
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? ' 🔽'
+                        : ' 🔼'
+                      : ''}
+                  </span>
+                  {/* Render the columns filter UI */}
+                  <div>{column.canFilter ? column.render('Filter') : null}</div>
+
+                  {/* Add a sort direction indicator */}
+                </th>
+              ))}
+            </tr>
+          ))}
+          <tr>
+            <th
+              colSpan={visibleColumns.length}
+              style={{
+                textAlign: 'left',
+              }}
+            >
+              <GlobalFilter
+                preGlobalFilteredRows={preGlobalFilteredRows}
+                globalFilter={state.globalFilter}
+                setGlobalFilter={setGlobalFilter}
+              />
+            </th>
+          </tr>
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {firstPageRows.map((row, i) => {
+            prepareRow(row)
+
+            return (
+
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+              </tr>
+
+            )
+          })}
+        </tbody>
+      </table>
+      <br />
+      <div>Showing {rows.length} rows</div>
+      <div>
+        <pre>
+          <code>{JSON.stringify(state.filters, null, 2)}</code>
+        </pre>
+      </div>
+    </>
+  )
+}
+
+//filter: 'fuzzyText', pour recherche différente...
+function PageEmployees() {
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Name',
+        columns: [
+            { 
             Header: 'first Name', 
             accessor: 'firstName', // accessor is the "key" in the data 
+
             },
             { 
             Header: 'last Name', 
@@ -37,6 +276,8 @@ import { useTable, useSortBy } from 'react-table'
             { 
             Header: 'Department', 
             accessor: 'department', 
+            Filter: SelectColumnFilter,
+            filter: 'includes',
             },
             { 
             Header: 'Date of Birth', 
@@ -53,124 +294,44 @@ import { useTable, useSortBy } from 'react-table'
             { 
             Header: 'State', 
             accessor: 'state', 
+            Filter: SelectColumnFilter,
+            filter: 'includes',
             },
 
             { 
             Header: 'Zip Code', 
             accessor: 'zip', 
             }
+          
+
+        ],
+      },
     ],
     []
-    )
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        rows,
-        prepareRow,
-    } = useTable({ columns, data }, useSortBy)
+  )
+  const [arrayOfObjectsOfEmplyees, setObjectsOfEmplyees] = useState([]);
+  const [loaded, setLoaded] = useState('0');
 
-    /**
-     * to convert a timestamps in fr 
-     * @param {timestamp} timestamp 
-     * @returns 
-     */
-    function convertTimeToday(timestamp) {
-        let aDate = ''
-        if (timestamp !== undefined) {
-            var date = new Date(timestamp*1000);
-            aDate= date.getDate()+"/"+(date.getMonth()+1)+ "/"+date.getFullYear()
-            //console.log(`${timestamp} converted to ${aDate}`)
-        }
-        //else console.log(`${timestamp} connot be converted`)
-        return aDate
-    }
+  useEffect(() => {
+    getData().then(function(employeeArray) {
+      setObjectsOfEmplyees(employeeArray)
+      //console.log('ppf', employeeArray)
+      setLoaded(1)
+      });
+}, [])
 
-    async function getDatas() {
-        let employeeArray = [];
-        try {
-            let collRef = await collection(db, 'employee')
-            let data = await getDocs(collRef)
-            data.docs.map(el => {
-                let employee = { ...el.data(), 'id': el.id , 'startDateOk': convertTimeToday(el.data().startDate.seconds) , 'birthDateOk': convertTimeToday(el.data().birthDate.seconds)} // ad the id of the current  object
-                employeeArray.push(employee);
-                return  employeeArray; // map expect a return
-            });
-            setObjectsOfEmplyees(employeeArray)
-        } catch (e) {
-            console.log("error getting datas", e);
-            return 'error';
-        }
-        console.log("getDatas called", employeeArray);
+// don't know why https://react-table.tanstack.com/docs/examples/filtering have
+//React.useMemo(() => makeData(100000), []) ??? !!!
+  return (<>
+    <NavLink className="link goback" to="/">Go Back</NavLink>
 
-    }
-
-    useEffect(() => {
-        getDatas()
-    }, [])
-
-    return (
-    <>
-            {/*arrayOfObjectsOfEmplyees.map((item) => (
-                <div key={item.id}> {item.lastName} </div>
-            ))*/}
-
-<table {...getTableProps()} style={{ border: 'solid 1px blue' }}>
-       <thead>
-         {headerGroups.map(headerGroup => (
-           <tr {...headerGroup.getHeaderGroupProps()}>
-             {headerGroup.headers.map(column => (
-               <th
-                 {...column.getHeaderProps(column.getSortByToggleProps())}
-                 style={{
-                   borderBottom: 'solid 3px red',
-                   background: 'aliceblue',
-                   color: 'black',
-                   fontWeight: 'bold',
-                 }}
-               >
-                 {column.render('Header')}
-                  {/* Add a sort direction indicator */}
-                  <span>
-                    {column.isSorted
-                      ? column.isSortedDesc
-                        ? ' 🔽'
-                        : ' 🔼'
-                      : ''}
-                  </span>
-               </th>
-             ))}
-           </tr>
-         ))}
-       </thead>
-       <tbody {...getTableBodyProps()}>
-         {rows.map(row => {
-           prepareRow(row)
-           return (
-             <tr {...row.getRowProps()}>
-               {row.cells.map(cell => {
-                 return (
-                   <td
-                     {...cell.getCellProps()}
-                     style={{
-                       padding: '10px',
-                       border: 'solid 1px gray',
-                       background: 'white',
-                       color: 'black'
-                     }}
-                   >
-                     {cell.render('Cell')}
-                   </td>
-                 )
-               })}
-             </tr>
-           )
-         })}
-       </tbody>
-     </table>
-
+    <Styles>
+    {loaded ? <Table columns={columns} data={arrayOfObjectsOfEmplyees} /> : null}
+    </Styles>
     </>
-    )
+  )
 }
 
-export default PageEmployees;
+export default PageEmployees
+
+
