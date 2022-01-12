@@ -2,21 +2,25 @@ import db from '../firebaseConfig.js';
 import { collection, getDocs } from 'firebase/firestore/lite';
 
 
-    /**
-     * to convert a timestamps in fr 
-     * @param {timestamp} timestamp 
-     * @returns 
-     */
-     function convertTimeToday(timestamp) {
-      let aDate = ''
-      if (timestamp !== undefined) {
-          var date = new Date(timestamp*1000);
-          aDate= date.getDate()+"/"+(date.getMonth()+1)+ "/"+date.getFullYear()
-          //console.log(`${timestamp} converted to ${aDate}`)
-      }
-      //else console.log(`${timestamp} connot be converted`)
-      return aDate
-  }
+/**
+ * to convert a timestamps in fr 
+ * @param {timestamp} timestamp 
+ * @returns 
+ */
+function convertTimeToday(timestamp) {
+    let aDate = ''
+    if (timestamp !== undefined) {
+        var date = new Date(timestamp*1000);
+        aDate= monthOrDay2digits(date.getDate()) + "/"+monthOrDay2digits(date.getMonth()+1) +  "/"+date.getFullYear()
+        //console.log(`${timestamp} converted to ${aDate}`)
+    }
+    //else console.log(`${timestamp} connot be converted`)
+    return aDate
+
+    function monthOrDay2digits(month)    { 
+        return (month < 10 ? '0' : '') + month;
+    }
+}
 
 
 export default  async function getData() {

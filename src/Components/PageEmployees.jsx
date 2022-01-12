@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { useTable, useFilters, useGlobalFilter, useAsyncDebounce,     usePagination} from 'react-table'
 // A great library for fuzzy filtering/sorting items
 import matchSorter from 'match-sorter'
 
@@ -37,6 +37,10 @@ const Styles = styled.div`
         border-right: 0;
       }
     }
+  }
+
+  .pagination {
+    padding: 0.5rem;
   }
 `
 
@@ -171,16 +175,32 @@ function Table({ columns, data }) {
     visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
+
+    page, // Instead of using 'rows', we'll use page,
+    // which has only the rows for the active page
+
+    // The rest of these things are super handy, too ;)
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
       data,
       defaultColumn, // Be sure to pass the defaultColumn option
       filterTypes,
+      initialState: { pageIndex: 0 },
     },
     useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
-    useSortBy
+    useSortBy,
+    usePagination
   )
 
   // We don't want to render all of the rows for this example, so cap
@@ -189,6 +209,22 @@ function Table({ columns, data }) {
 
   return (
     <>
+      <pre>
+        <code>
+          {JSON.stringify(
+            {
+              pageIndex,
+              pageSize,
+              pageCount,
+              canNextPage,
+              canPreviousPage,
+            },
+            null,
+            2
+          )}
+        </code>
+      </pre>
+
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
@@ -227,7 +263,8 @@ function Table({ columns, data }) {
           </tr>
         </thead>
         <tbody {...getTableBodyProps()}>
-          {firstPageRows.map((row, i) => {
+          {/*// for pagination :  Instead of using 'rows', we'll use page, */}
+          {page.map((row, i) => {
             prepareRow(row)
 
             return (
@@ -244,6 +281,58 @@ function Table({ columns, data }) {
       </table>
       <br />
       <div>Showing {rows.length} rows</div>
+
+
+     {/* 
+        Pagination can be built however you'd like. 
+        This is just a very basic UI implementation:
+      */}
+      <div className="pagination">
+        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+          {'<<'}
+        </button>{' '}
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          {'<'}
+        </button>{' '}
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          {'>'}
+        </button>{' '}
+        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+          {'>>'}
+        </button>{' '}
+        <span>
+          Page{' '}
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{' '}
+        </span>
+        <span>
+          | Go to page:{' '}
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={e => {
+              const page = e.target.value ? Number(e.target.value) - 1 : 0
+              gotoPage(page)
+            }}
+            style={{ width: '100px' }}
+          />
+        </span>{' '}
+        <select
+          value={pageSize}
+          onChange={e => {
+            setPageSize(Number(e.target.value))
+          }}
+        >
+          {[3, 10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Show {pageSize}
+            </option>
+          ))}
+        </select>
+      </div>
+
+
       <div>
         <pre>
           <code>{JSON.stringify(state.filters, null, 2)}</code>
