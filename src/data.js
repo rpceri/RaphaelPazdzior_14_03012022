@@ -1,9 +1,9 @@
-import db from '../firebaseConfig.js';
-import { collection, getDocs } from 'firebase/firestore/lite';
+import db from './firebaseConfig.js';
+import { collection, getDocs, addDoc } from 'firebase/firestore/lite';
 
 
 
-export default  async function getData() {
+export  default async function getData() {
     let employeeArray = [];
     try {
         let collRef = await collection(db, 'employee')
@@ -21,6 +21,31 @@ export default  async function getData() {
         return(employeeArray)
     } catch (e) {
         console.log("error getting datas", e);
+        
+    }
+};
+
+export async function setData(datas) {
+    try {
+        let collRef = await collection(db, 'employee')
+        await addDoc(collRef, {
+            firstName: datas.firstName,
+            lastName: datas.lastName,
+            birthDate: datas.birthDate,
+            startDate: datas.startDate,
+            street: datas.street,
+            city: datas.city,
+            state: datas.state,
+            zip: datas.zip,
+            department: datas.department,
+            insertionDate: new Date()
+        });
+        //console.log("addDoc called");
+        let msg = `${datas.firstName}  ${datas.lastName} added`
+        return(msg)
+    } catch (error) {
+        console.log('pb add collection', error)
+        //setError(true);
         return 'error';
     }
 }

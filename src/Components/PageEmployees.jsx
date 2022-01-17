@@ -6,7 +6,7 @@ import matchSorter from 'match-sorter'
 
 import { useSortBy } from 'react-table'
 
-import getData from './getData'
+import getData from '../data.js'
 import { useEffect, useState } from 'react';
 
 import { NavLink } from "react-router-dom";

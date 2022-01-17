@@ -8,10 +8,7 @@ import Dropdown from 'rc-dropdown';
 import Menu, { Item as MenuItem } from 'rc-menu';
 import 'rc-dropdown/assets/index.css';
 
-import db from '../firebaseConfig.js';
-import { collection, addDoc } from 'firebase/firestore/lite';
-
-
+import {setData} from '../data.js'
 
 /**
  * Return template of home page
@@ -31,9 +28,9 @@ function PageIndex() {
     const [startDate, setStartDate] = useState(new Date());
     const [street, setStreet] = useState('the street');
     const [city, setCity] = useState('the city');
-    const [state, setState] = useState('');
+    const [state, setState] = useState('AL');
     const [zip, setZip] = useState('42230');
-    const [department, setDepartment] = useState('');
+    const [department, setDepartment] = useState('Se');
 
     const [error, setError] = useState(false);
     const [addEmployeeMessage, setAddEmployeeMessage] = useState('');
@@ -59,7 +56,7 @@ function PageIndex() {
         let zipErrorMessage = '';
         let departmentErrorMessage = '';
         
-        if (!firstName) { firstNameErrorMessage = 'Ffirst name required' };
+        if (!firstName) { firstNameErrorMessage = 'First name required' };
         if (!lastName) { lastNameErrorMessage = 'Last name required' };
         if (!street) { streetErrorMessage = 'Street required' };
         if (!city) { cityErrorMessage = 'City required' };
@@ -90,26 +87,12 @@ function PageIndex() {
     }
 
     async function recordDatas() {
-        try {
-            let collRef = await collection(db, 'employee')
-            await addDoc(collRef, {
-                firstName: firstName,
-                lastName: lastName,
-                birthDate: birthDate,
-                startDate: startDate,
-                street: street,
-                city: city,
-                state: state,
-                zip: zip,
-                department: department,
-                insertionDate: new Date()
-            });
-            console.log("addDoc called");
-            setAddEmployeeMessage(`${firstName}  ${lastName} added`);
-        } catch (error) {
-            console.log('pb add collection', error)
-            setError(true);
-        }
+        let arr = {firstName : firstName, lastName : lastName, birthDate : birthDate, startDate: startDate, street :street
+            , city :city, state :state, zip :zip, department :department, insertionDate :new Date()}
+        setData(arr).then(function(msg) {
+            if(msg !== 'error') setAddEmployeeMessage(msg);
+            else setAddEmployeeMessage('oups');
+        });
 
         setFirstNameError('');
         setLastNameError('');
@@ -145,40 +128,19 @@ function PageIndex() {
         //console.log(visible); return true. no need in this project
     }
 
-    const dpts = [{id : 'Se1', name : 'Sales'},
-    {id : 'Ma1', name : 'Marketing'},
-    {id : 'En1', name : 'Engineering'},
-    {id : 'Hr1', name : 'Human Ressources'},
-    {id : 'Le1', name : 'Legal'}] // tableau contenant des objet, pourra ettre mappé
-    // fonctionne pas , a essayer quand meme..???
-    const dptsObj = {Se : 'Salesi', Ma : 'Marketing', En : 'Engineering', Hr: 'Human Ressources', Le :'Legal'}; // les tableaux associatifs sont des objets dynamiques que l'utilisateur redéfinit selon ses besoins. https://www.xul.fr/ecmascript/associatif.php
-
+    const dpts = [{id : 'Se', name : 'Sales'},
+                    {id : 'Ma', name : 'Marketing'},
+                    {id : 'En', name : 'Engineering'},
+                    {id : 'Hr', name : 'Human Ressources'},
+                    {id : 'Le', name : 'Legal'}] // tableau contenant des objet, pourra ettre mappé
     function departementsList () {
-        /*plus simple mais pas d'index : const dptsSimple = ['Sales', 'Marketing', 'Engineering', 'Human Ressources', 'Legal'];   
-        {dptsSimple.map((item) => (
-            <MenuItem key={item}>{item}</MenuItem>
-        ))}*/
-
-        //console.log('dpts', dpts)
-        //console.log('dptsObj', dptsObj)
-        /*Object.keys(dptsObj).forEach((dpt) => (
-            console.log('dpt', dpt)
-
-        ))
-        idem  mais peut pas etre produit dans le retun :
-        let items = ''
-        for(var i in dptsObj) {
-            items = items + '<MenuItem key="' + i + '"> ' + departments[i] + '</MenuItem>'
-        }*/
         //https://openclassrooms.com/fr/courses/7008001-debutez-avec-react/7135593-gagnez-en-temps-et-en-efficacite-grace-aux-listes-et-aux-conditions
         return (<Menu onSelect={onSelectDepartement}>
             {dpts.map((item) => (
                 <MenuItem key={item.id}>{item.name}</MenuItem>
             ))}
 
-            {Object.keys(dptsObj).forEach(dpt => (
-                <MenuItem key={dpt}>{dptsObj[dpt]}</MenuItem>
-            ))}
+
         </Menu>)
     }
     const states = [
