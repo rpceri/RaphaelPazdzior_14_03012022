@@ -2,26 +2,6 @@ import db from '../firebaseConfig.js';
 import { collection, getDocs } from 'firebase/firestore/lite';
 
 
-/**
- * to convert a timestamps in fr 
- * @param {timestamp} timestamp 
- * @returns 
- */
-function convertTimeToday(timestamp) {
-    let aDate = ''
-    if (timestamp !== undefined) {
-        var date = new Date(timestamp*1000);
-        aDate= monthOrDay2digits(date.getDate()) + "/"+monthOrDay2digits(date.getMonth()+1) +  "/"+date.getFullYear()
-        //console.log(`${timestamp} converted to ${aDate}`)
-    }
-    //else console.log(`${timestamp} connot be converted`)
-    return aDate
-
-    function monthOrDay2digits(month)    { 
-        return (month < 10 ? '0' : '') + month;
-    }
-}
-
 
 export default  async function getData() {
     let employeeArray = [];
@@ -29,7 +9,11 @@ export default  async function getData() {
         let collRef = await collection(db, 'employee')
         let data = await getDocs(collRef)
         data.docs.map(el => {
-            let employee = { ...el.data(), 'id': el.id , 'startDateOk': convertTimeToday(el.data().startDate.seconds) , 'birthDateOk': convertTimeToday(el.data().birthDate.seconds)} // ad the id of the current  object
+            let dateStartTimeStamp = '';
+            if(el.data().startDate.seconds !== undefined) dateStartTimeStamp =el.data().startDate.seconds * 1000
+            let dateBirthDateOkTimeStamp = '';
+            if(el.data().startDate.seconds !== undefined) dateBirthDateOkTimeStamp =el.data().birthDate.seconds * 1000
+            let employee = { ...el.data(), 'id': el.id , 'dateStartTimeStamp':  dateStartTimeStamp, 'dateBirthDateOkTimeStamp': dateBirthDateOkTimeStamp} // ad the id of the current  object
             employeeArray.push(employee);           
             return  employeeArray; // map expect a return
         });

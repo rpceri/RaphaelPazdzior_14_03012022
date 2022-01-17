@@ -203,9 +203,25 @@ function Table({ columns, data }) {
     usePagination
   )
 
-  // We don't want to render all of the rows for this example, so cap
-  // it for this use case
-  const firstPageRows = rows.slice(0, 10)
+ /**
+ * to convert a timestamps in fr 
+ * @param {timestamp} timestamp 
+ * @returns 
+ */
+  function convertTimeToday(timestamp) {
+    let aDate = ''
+    if (timestamp !== undefined) {
+        var date = new Date(timestamp);
+        aDate= monthOrDay2digits(date.getDate()) + "/"+monthOrDay2digits(date.getMonth()+1) +  "/"+date.getFullYear()
+        //console.log(`${timestamp} converted to ${aDate}`)
+    }
+    //else console.log(`${timestamp} connot be converted`)
+    return aDate
+
+    function monthOrDay2digits(month)    { 
+        return (month < 10 ? '0' : '') + month;
+    }
+}
 
   return (
     <>
@@ -270,8 +286,14 @@ function Table({ columns, data }) {
             return (
 
               <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                {row.cells.map(cell => {  
+                  if(cell.getCellProps().key.indexOf('dateStartTimeStamp') >= 0 || cell.getCellProps().key.indexOf('dateBirthDateOkTimeStamp') >= 0) {
+                    //console.log(cell.getCellProps().key + ':: ' + cell.value)
+                    let ll =  convertTimeToday(cell.value)
+                    return <td {...cell.getCellProps()}>{ll}</td>
+                  }
+                  else  
+                    return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                 })}
               </tr>
 
@@ -280,7 +302,7 @@ function Table({ columns, data }) {
         </tbody>
       </table>
       <br />
-      <div>Showing {rows.length} rows</div>
+      <div>Showing {page.length} of {rows.length} rows</div>
 
 
      {/* 
@@ -360,7 +382,18 @@ function PageEmployees() {
             }, 
             { 
             Header: 'Start Date', 
-            accessor: 'startDateOk', 
+            accessor: 'dateStartTimeStamp',
+            disableFilters: true,
+            sortType: (a, b) => {
+              var a1 = new Date(a.values.dateStartTimeStamp).getTime();
+              var b1 = new Date(b.values.dateStartTimeStamp).getTime();
+              if(a1<b1)
+                return 1;
+              else if(a1>b1)
+                return -1;
+              else
+                return 0;
+            }
             },
             { 
             Header: 'Department', 
@@ -370,7 +403,18 @@ function PageEmployees() {
             },
             { 
             Header: 'Date of Birth', 
-            accessor: 'birthDateOk', 
+            accessor: 'dateBirthDateOkTimeStamp',
+            disableFilters: true,
+            sortType: (a, b) => {
+              var a1 = new Date(a.values.dateBirthDateOkTimeStamp).getTime();
+              var b1 = new Date(b.values.dateBirthDateOkTimeStamp).getTime();
+              if(a1<b1)
+                return 1;
+              else if(a1>b1)
+                return -1;
+              else
+                return 0;
+            }
             },
             { 
             Header: 'Street', 
