@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import DatePicker from "react-datepicker";
@@ -8,7 +8,7 @@ import Dropdown from 'rc-dropdown';
 import Menu, { Item as MenuItem } from 'rc-menu';
 import 'rc-dropdown/assets/index.css';
 
-import {setData} from '../data.js'
+import {setData, setStats, setDepts, getDepts, getStates} from '../data.js'
 
 /**
  * Return template of home page
@@ -18,10 +18,7 @@ import {setData} from '../data.js'
  * @param {  }
  * @return { HTMLElement }
 */
-function PageIndex() {
-
-
-    
+function PageIndex() {    
     const [firstName, setFirstName] = useState('First name');
     const [lastName, setLastName] = useState('Last name');
     const [birthDate, setBirthDate] = useState(new Date());
@@ -34,7 +31,6 @@ function PageIndex() {
 
     const [error, setError] = useState(false);
     const [addEmployeeMessage, setAddEmployeeMessage] = useState('');
-
 
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
@@ -85,6 +81,23 @@ function PageIndex() {
             recordDatas()
         }
     }
+  
+    const [dpts , setObjectsOfDpts] = useState([]);
+    const [states , setObjectsOfStates] = useState([]);
+    useEffect(() => {
+        //setStats() //called one time to set states dattas on firestore
+        //setDepts() //called one time to set departements dattas on firestore
+        getDepts().then(function(array) {
+            setObjectsOfDpts(array)
+            //console.log('ppf', employeeArray)
+            //setLoaded(1)
+        });
+        getStates().then(function(array) {
+            setObjectsOfStates(array)
+            //console.log('ppf', employeeArray)
+            //setLoaded(1)
+        });
+    }, [])
 
     async function recordDatas() {
         let arr = {firstName : firstName, lastName : lastName, birthDate : birthDate, startDate: startDate, street :street
@@ -116,7 +129,7 @@ function PageIndex() {
         setSeletedDepartementName(libelleDuChoix.name)
         setDepartment(key)
     }
-    // called fonction when a state is selectedd
+    // called fonction when a state is selected
     function onSelectState({ key }) {
         let libelleDuChoix = states.find(el => el.id === key);
         console.log(`choix dropdown state associé à la clé ${key} : `, libelleDuChoix.name);
@@ -128,82 +141,16 @@ function PageIndex() {
         //console.log(visible); return true. no need in this project
     }
 
-    const dpts = [{id : 'Se', name : 'Sales'},
-                    {id : 'Ma', name : 'Marketing'},
-                    {id : 'En', name : 'Engineering'},
-                    {id : 'Hr', name : 'Human Ressources'},
-                    {id : 'Le', name : 'Legal'}] // tableau contenant des objet, pourra ettre mappé
+
     function departementsList () {
         //https://openclassrooms.com/fr/courses/7008001-debutez-avec-react/7135593-gagnez-en-temps-et-en-efficacite-grace-aux-listes-et-aux-conditions
         return (<Menu onSelect={onSelectDepartement}>
             {dpts.map((item) => (
                 <MenuItem key={item.id}>{item.name}</MenuItem>
             ))}
-
-
         </Menu>)
     }
-    const states = [
-        {name : "Alabama", id : "AL"},
-        {name : "Alaska", id : "AK"},
-        {name : "American Samoa", id : "AS"},
-        {name : "Arizona", id : "AZ"},
-        {name : "Arkansas", id : "AR"},
-        {name : "California", id : "CA"},
-        {name : "Colorado", id : "CO"},
-        {name : "Connecticut", id : "CT"},
-        {name : "Delaware", id : "DE"},
-        {name : "District Of Columbia", id : "DC"},
-        {name : "Federated States Of Micronesia", id : "FM"},
-        {name : "Florida", id : "FL"},
-        {name : "Georgia", id : "GA"},
-        {name : "Guam", id : "GU"},
-        {name : "Hawaii", id : "HI"},
-        {name : "Idaho", id : "ID"},
-        {name : "Illinois", id : "IL"},
-        {name : "Indiana", id : "IN"},
-        {name : "Iowa", id : "IA"},
-        {name : "Kansas", id : "KS"},
-        {name : "Kentucky", id : "KY"},
-        {name : "Louisiana", id : "LA"},
-        {name : "Maine", id : "ME"},
-        {name : "Marshall Islands", id : "MH"},
-        {name : "Maryland", id : "MD"},
-        {name : "Massachusetts", id : "MA"},
-        {name : "Michigan", id : "MI"},
-        {name : "Minnesota", id : "MN"},
-        {name : "Mississippi", id : "MS"},
-        {name : "Missouri", id : "MO"},
-        {name : "Montana", id : "MT"},
-        {name : "Nebraska", id : "NE"},
-        {name : "Nevada", id : "NV"},
-        {name : "New Hampshire", id : "NH"},
-        {name : "New Jersey", id : "NJ"},
-        {name : "New Mexico", id : "NM"},
-        {name : "New York", id : "NY"},
-        {name : "North Carolina", id : "NC"},
-        {name : "North Dakota", id : "ND"},
-        {name : "Northern Mariana Islands", id : "MP"},
-        {name : "Ohio", id : "OH"},
-        {name : "Oklahoma", id : "OK"},
-        {name : "Oregon", id : "OR"},
-        {name : "Palau", id : "PW"},
-        {name : "Pennsylvania", id : "PA"},
-        {name : "Puerto Rico", id : "PR"},
-        {name : "Rhode Island", id : "RI"},
-        {name : "South Carolina", id : "SC"},
-        {name : "South Dakota", id : "SD"},
-        {name : "Tennessee", id : "TN"},
-        {name : "Texas", id : "TX"},
-        {name : "Utah", id : "UT"},
-        {name : "Vermont", id : "VT"},
-        {name : "Virgin Islands", id : "VI"},
-        {name : "Virginia", id : "VA"},
-        {name : "Washington", id : "WA"},
-        {name : "West Virginia", id : "WV"},
-        {name : "Wisconsin", id : "WI"},
-        {name : "Wyoming", id : "WY"}
-    ];
+
 
     function statesList () {
         return (<Menu onSelect={onSelectState}>

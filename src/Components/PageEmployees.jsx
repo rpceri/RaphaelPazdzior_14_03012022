@@ -286,7 +286,8 @@ function Table({ columns, data }) {
             return (
 
               <tr {...row.getRowProps()}>
-                {row.cells.map(cell => {  
+                {row.cells.map(cell => {
+                  // to convert date in fr format
                   if(cell.getCellProps().key.indexOf('dateStartTimeStamp') >= 0 || cell.getCellProps().key.indexOf('dateBirthDateOkTimeStamp') >= 0) {
                     //console.log(cell.getCellProps().key + ':: ' + cell.value)
                     let ll =  convertTimeToday(cell.value)
@@ -397,7 +398,7 @@ function PageEmployees() {
             },
             { 
             Header: 'Department', 
-            accessor: 'department', 
+            accessor: 'libDep', 
             Filter: SelectColumnFilter,
             filter: 'includes',
             },
@@ -426,7 +427,7 @@ function PageEmployees() {
             },
             { 
             Header: 'State', 
-            accessor: 'state', 
+            accessor: 'libState', 
             Filter: SelectColumnFilter,
             filter: 'includes',
             },
