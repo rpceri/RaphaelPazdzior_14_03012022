@@ -179,10 +179,10 @@ function PageIndex() {
                     {lastNameError ? <div className="form-error">{lastNameError}</div> : null}
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
-                    <DatePicker selected={birthDate} onChange={(date) => setBirthDate(date)} />
+                    <DatePicker selected={birthDate} onChange={(date) => setBirthDate(date)} dateFormat="dd/MM/yyyy" />
                     
                     <label htmlFor="start-date">Start Date</label>
-                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} dateFormat="dd/MM/yyyy" />
                 </div>
                 <div className="address">
                     <label htmlFor="street">Street</label>
