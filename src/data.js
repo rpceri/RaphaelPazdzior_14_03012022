@@ -3,7 +3,7 @@ import { collection, getDocs, addDoc, doc, deleteDoc, query, orderBy} from 'fire
 
 
 /**
- * got employee's list, return an array
+ * get employee's list, return an array
 */
 export  default async function getData() {
     var depts = await getDepts()
@@ -32,7 +32,7 @@ export  default async function getData() {
             , 'libDep': libDep, 'libState': libState} // ad the id of the current  object
             employeeArray.push(employee);           
         });
-        //console.log("getDatas called", employeeArray);
+        console.log("getDatas called", employeeArray);
         return(employeeArray)
     } catch (e) {
         console.log("error getting datas", e);
@@ -59,7 +59,7 @@ export async function setData(datas) {
             insertionDate: new Date()
         });
         //console.log("addDoc called");
-        let msg = `${datas.firstName}  ${datas.lastName} added`
+        let msg = `All right, ${datas.firstName}  ${datas.lastName} is now added.`
         return(msg)
     } catch (error) {
         console.log('pb add collection', error)

@@ -10,6 +10,8 @@ import 'rc-dropdown/assets/index.css';
 
 import {setData, setStats, setDepts, getDepts, getStates} from '../data.js'
 
+import Modal from './Modal-rp/Modal-rp.js';
+
 /**
  * Return template of home page
  *
@@ -29,8 +31,15 @@ function PageIndex() {
     const [zip, setZip] = useState('42230');
     const [department, setDepartment] = useState('Se');
 
-    const [error, setError] = useState(false);
-    const [addEmployeeMessage, setAddEmployeeMessage] = useState('');
+    /** for modal */
+    const [messageInformation, setMessageInformation] = useState('');
+
+    const [isModalVisible, setModaleVisible] = useState(false);
+    const handleModalResponse = () => {
+        setModaleVisible(false);
+        setMessageInformation('');
+    }
+    /** end for modal */
 
     const [firstNameError, setFirstNameError] = useState('');
     const [lastNameError, setLastNameError] = useState('');
@@ -42,6 +51,8 @@ function PageIndex() {
 
     const [seletedDepartementName, setSeletedDepartementName] = useState('select');
     const [seletedStateName, setSeletedStateName] = useState('select');
+
+
 
     function validate () {
         let firstNameErrorMessage = '';
@@ -69,6 +80,9 @@ function PageIndex() {
             setZipError(zipErrorMessage);
             setDepartmentError(departmentErrorMessage);
 
+            setMessageInformation('You have to complete all areas');
+            setModaleVisible(true);
+
             return false;
         }
 
@@ -81,30 +95,16 @@ function PageIndex() {
             recordDatas()
         }
     }
-  
-    const [dpts , setObjectsOfDpts] = useState([]);
-    const [states , setObjectsOfStates] = useState([]);
-    useEffect(() => {
-        //setStats() //called one time to set states dattas on firestore
-        //setDepts() //called one time to set departements dattas on firestore
-        getDepts().then(function(array) {
-            setObjectsOfDpts(array)
-            //console.log('ppf', employeeArray)
-            //setLoaded(1)
-        });
-        getStates().then(function(array) {
-            setObjectsOfStates(array)
-            //console.log('ppf', employeeArray)
-            //setLoaded(1)
-        });
-    }, [])
 
     async function recordDatas() {
+        //setMessageInformation('First name Last name added');
+        //setModaleVisible(true);
+
         let arr = {firstName : firstName, lastName : lastName, birthDate : birthDate, startDate: startDate, street :street
             , city :city, state :state, zip :zip, department :department, insertionDate :new Date()}
         setData(arr).then(function(msg) {
-            if(msg !== 'error') setAddEmployeeMessage(msg);
-            else setAddEmployeeMessage('oups');
+            setMessageInformation(msg);
+            setModaleVisible(true);
         });
 
         setFirstNameError('');
@@ -151,7 +151,6 @@ function PageIndex() {
         </Menu>)
     }
 
-
     function statesList () {
         return (<Menu onSelect={onSelectState}>
             {states.map((item) => (
@@ -159,6 +158,23 @@ function PageIndex() {
             ))}
         </Menu>)
     }
+
+    const [dpts , setObjectsOfDpts] = useState([]);
+    const [states , setObjectsOfStates] = useState([]);
+    useEffect(() => {
+        //setStats() //called one time to set states dattas on firestore
+        //setDepts() //called one time to set departements dattas on firestore
+        getDepts().then(function(array) {
+            setObjectsOfDpts(array)
+            //console.log('ppf', employeeArray)
+            //setLoaded(1)
+        });
+        getStates().then(function(array) {
+            setObjectsOfStates(array)
+            //console.log('ppf', employeeArray)
+            //setLoaded(1)
+        });
+    }, [])
 
     return ( 
     <>
@@ -220,8 +236,7 @@ function PageIndex() {
                 </div>
             </form>
             <button onClick={handleSubmit}>Save</ button>
-            {addEmployeeMessage}
-            {error }
+            <Modal isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
         </div>
 
     </>

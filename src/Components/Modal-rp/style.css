@@ -1,0 +1,41 @@
+.modal-rp {
+    position: absolute;
+    display: flex;
+    width: auto;
+    height: auto;
+    margin : auto;
+    min-height : 130px;
+    min-width : 100px;
+    background-color: rgba(139, 161, 26, 0.97);
+    border-radius: 5px;
+    font-size: 0.9rem;
+    font-weight: 900;
+
+    justify-content: center; /* alignement vertical */
+    align-items: center;
+    flex-direction: column;
+    box-shadow : 10px 10px 5px #718121;
+    border: 1px dotted rgb(94, 92, 92)
+}
+
+.modal-rp__text {
+    padding: 0 50px;
+}
+.modal-rp__close{
+    position: absolute;
+    right : -10px;
+    top : -8px;
+    margin-top: 0;
+    font-size: 0.9rem;
+    padding: 0 5px;
+    border-radius: 20px;
+}
+
+/* no need for this project, but maybe for an another...
+.modal-rp__button {
+    color: #93AD18;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+*/
