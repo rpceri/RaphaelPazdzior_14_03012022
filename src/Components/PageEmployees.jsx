@@ -457,13 +457,13 @@ function PageEmployees() {
 
 // don't know why https://react-table.tanstack.com/docs/examples/filtering have
 //React.useMemo(() => makeData(100000), []) ??? !!!
-  return (<>
+  return (<div className="container"> 
     <NavLink className="link goback" to="/">Go Back</NavLink>
 
     <Styles>
     {loaded ? <Table columns={columns} data={arrayOfObjectsOfEmplyees} /> : null}
     </Styles>
-    </>
+    </div>
   )
 }
 

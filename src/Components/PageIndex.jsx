@@ -181,7 +181,8 @@ function PageIndex() {
         <div className="title">
             <h1>HR.net</h1>
         </div>
-        <div className="container">
+        <div className="container"> 
+            <img src={`${process.env.PUBLIC_URL}/medias/wealthHealth.jpg`} className="logo" title="wealthHealth" alt="wealthHealth" />
             <Link className="link" to='/employeeList'>View Current Employees</Link>
             <h2>Create Employee</h2>
             <form className="container2">
