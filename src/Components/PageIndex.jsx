@@ -10,7 +10,9 @@ import 'rc-dropdown/assets/index.css';
 
 import {setData, setStats, setDepts, getDepts, getStates} from '../data.js'
 
-import Modal from './Modal-rp/Modal-rp.js';
+//import Modal from './Modal-rp/Modal-rp.js';
+import { HrnetModal as Modal} from 'hrnet-modal-rp';
+import 'hrnet-modal-rp/dist/index.css'
 
 /**
  * Return template of home page
