@@ -225,6 +225,7 @@ function Table({ columns, data }) {
 
   return (
     <>
+      { /*}
       <pre>
         <code>
           {JSON.stringify(
@@ -239,7 +240,7 @@ function Table({ columns, data }) {
             2
           )}
         </code>
-      </pre>
+          </pre> */ }
 
       <table {...getTableProps()}>
         <thead>
@@ -355,12 +356,12 @@ function Table({ columns, data }) {
         </select>
       </div>
 
-
+      { /*}
       <div>
         <pre>
           <code>{JSON.stringify(state.filters, null, 2)}</code>
         </pre>
-      </div>
+          </div>*/}
     </>
   )
 }
@@ -370,7 +371,7 @@ function PageEmployees() {
   const columns = React.useMemo(
     () => [
       {
-        Header: 'Name',
+        Header: 'List of employees',
         columns: [
             { 
             Header: 'first Name', 

@@ -3,7 +3,7 @@
     display: flex;
     width: auto;
     height: auto;
-    margin : auto;
+    margin : 0, 15px; /* no ned auto, finaly....*/
     min-height : 130px;
     min-width : 100px;
     background-color: rgba(139, 161, 26, 0.97);

@@ -1,5 +1,6 @@
 # HRnet - WealthHealth
-Convert https://github.com/OpenClassrooms-Student-Center/P12_Front-end/ using React instead of actual  utilisant
+Convert a project using React instead of jquery
+Old project : https://github.com/OpenClassrooms-Student-Center/P12_Front-end/
 
 ## Dependencies
 
@@ -14,12 +15,13 @@ Convert https://github.com/OpenClassrooms-Student-Center/P12_Front-end/ using Re
 -    "rc-dropdown": "^3.2.0",
 -    "rc-menu"
 -    "react-table": "^7.7.0" and "styled-components": "^5.3.3", and "match-sorter": "^4.0.0",
+-    "esm": "^3.2.25" (to launch initFirestoreDatabase.js)
 
-## Data sources
-
-....
 
 ## Installation
+
+-    This app use a firesore db, go to firebaseConfig.js and change parameters in firebaseConfig 
+-    Populate the database :  node -r esm ./src/initFirestoreDatabase.js to store states and departements collections
 
 - Run the project :
 `npm start`, will run http://localhost:3001/

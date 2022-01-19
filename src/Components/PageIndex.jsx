@@ -80,7 +80,7 @@ function PageIndex() {
             setZipError(zipErrorMessage);
             setDepartmentError(departmentErrorMessage);
 
-            setMessageInformation('You have to complete all areas');
+            setMessageInformation('Sorry, you have to complete all areas');
             setModaleVisible(true);
 
             return false;
@@ -232,7 +232,6 @@ function PageIndex() {
                             <button style={{ width: 150, height: 20, fontSize:10, marginTop: 1 }}>{seletedDepartementName}</button>
                     </Dropdown>      
                     {departmentError ? <div className="form-error">{departmentError}</div> : null}
-
                 </div>
             </form>
             <button onClick={handleSubmit}>Save</ button>
