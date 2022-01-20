@@ -126,3 +126,40 @@ button:hover {
         width: 180px;
       }
 }
+
+/* some css for the modal component */
+/* the root div */
+.hrnet-modal-rp-div {
+  min-height : 130px;
+  min-width : 100px;
+
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 900;
+
+  justify-content: center; /* alignement vertical */
+
+  background-color: rgba(139, 161, 26, 0.97);
+  box-shadow : 10px 10px 5px #718121;
+  border: 1px dotted rgb(94, 92, 92)
+}
+
+/* the text message */
+.hrnet-modal-rp-text{
+  padding: 0 50px;
+}
+
+/* the main close button */
+/*.hrnet-modal-rp-bt-1st {
+  background-color: red;
+}*/
+
+/* the second close button */
+.hrnet-modal-rp-bt-2d {
+  right : -10px;
+  top : -8px;
+  margin-top: 0;
+  font-size: 0.9rem;
+  padding: 0 5px;
+  border-radius: 20px;
+}

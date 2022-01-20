@@ -17,6 +17,7 @@ Old project : https://github.com/OpenClassrooms-Student-Center/P12_Front-end/
 -    "react-table": "^7.7.0" and "styled-components": "^5.3.3", and "match-sorter": "^4.0.0",
 -    "esm": "^3.2.25" (to launch initFirestoreDatabase.js)
 
+-    "hrnet-modal-rp": "^1.0.5" (own component, who use react-draggable)
 
 ## Installation
 
