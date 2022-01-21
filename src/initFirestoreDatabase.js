@@ -1,7 +1,7 @@
 import db from './firebaseConfig.js';
 import { collection, getDocs, addDoc, doc, deleteDoc} from 'firebase/firestore/lite';
 
-/**
+/**setStats
  * launch this to populate firestore states collection
  * howto launch this js with node :  https://reactgo.com/node-es6-imports/ (install esm, and after: node -r esm ./src/initFirestoreDatabase.js)
 */
