@@ -236,7 +236,7 @@ function PageIndex() {
                 </div>
             </form>
             <button onClick={handleSubmit}>Save</ button>
-            <Modal isDraggable='1' isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
+            <Modal isDraggable='0' isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
         </div>
 
     </>
