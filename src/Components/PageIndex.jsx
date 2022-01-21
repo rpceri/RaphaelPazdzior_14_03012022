@@ -8,7 +8,7 @@ import Dropdown from 'rc-dropdown';
 import Menu, { Item as MenuItem } from 'rc-menu';
 import 'rc-dropdown/assets/index.css';
 
-import {setData, setStats, setDepts, getDepts, getStates} from '../data.js'
+import {setData, getDepts, getStates} from '../data.js'
 
 //import Modal from './Modal-rp/Modal-rp.js';
 import { HrnetModal as Modal} from 'hrnet-modal-rp';
@@ -164,8 +164,6 @@ function PageIndex() {
     const [dpts , setObjectsOfDpts] = useState([]);
     const [states , setObjectsOfStates] = useState([]);
     useEffect(() => {
-        //setStats() //called one time to set states dattas on firestore
-        //setDepts() //called one time to set departements dattas on firestore
         getDepts().then(function(array) {
             setObjectsOfDpts(array)
             //console.log('ppf', employeeArray)
