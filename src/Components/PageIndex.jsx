@@ -22,16 +22,18 @@ import 'hrnet-modal-rp/dist/index.css'
  * @param {  }
  * @return { HTMLElement }
 */
-function PageIndex() {    
-    const [firstName, setFirstName] = useState('First name');
-    const [lastName, setLastName] = useState('Last name');
-    const [birthDate, setBirthDate] = useState(new Date());
-    const [startDate, setStartDate] = useState(new Date());
-    const [street, setStreet] = useState('the street');
-    const [city, setCity] = useState('the city');
-    const [state, setState] = useState('AL');
-    const [zip, setZip] = useState('42230');
-    const [department, setDepartment] = useState('Se');
+function PageIndex() { 
+    let modDev = false;
+
+    const [firstName, setFirstName] = useState(modDev === true ? 'First name': '');
+    const [lastName, setLastName] = useState(modDev === true ? 'Last name': '');
+    const [birthDate, setBirthDate] = useState(modDev === true ? new Date(): '');
+    const [startDate, setStartDate] = useState(modDev === true ? new Date(): '');
+    const [street, setStreet] = useState(modDev === true ? 'the street': '');
+    const [city, setCity] = useState(modDev === true ? 'the city': '');
+    const [state, setState] = useState(modDev === true ? 'AL': '');
+    const [zip, setZip] = useState(modDev === true ? '42230': '');
+    const [department, setDepartment] = useState(modDev === true ? 'Se': '');
 
     /** for modal */
     const [messageInformation, setMessageInformation] = useState('');
@@ -121,7 +123,7 @@ function PageIndex() {
         setLastName('');
         setStreet('');
         setCity('');
-        setZip(0);
+        setZip('');
     }
 
     // called fonction when a departement is selectedd
@@ -236,7 +238,7 @@ function PageIndex() {
                 </div>
             </form>
             <button onClick={handleSubmit}>Save</ button>
-            <Modal isDraggable='0' isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
+            <Modal isDraggable='1' isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
         </div>
 
     </>

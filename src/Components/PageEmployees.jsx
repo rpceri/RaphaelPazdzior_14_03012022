@@ -210,12 +210,14 @@ function Table({ columns, data }) {
  */
   function convertTimeToday(timestamp) {
     let aDate = ''
-    if (timestamp !== undefined) {
+    if (timestamp !== '') {
         var date = new Date(timestamp);
         aDate= monthOrDay2digits(date.getDate()) + "/"+monthOrDay2digits(date.getMonth()+1) +  "/"+date.getFullYear()
         //console.log(`${timestamp} converted to ${aDate}`)
     }
-    //else console.log(`${timestamp} connot be converted`)
+    else {
+      console.log(`${timestamp} connot be converted`)
+    }
     return aDate
 
     function monthOrDay2digits(month)    { 

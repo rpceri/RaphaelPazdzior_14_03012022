@@ -15,10 +15,20 @@ export  default async function getData() {
         let data = await getDocs(collRef)
         data.docs.forEach((el) => {
             let dateStartTimeStamp = '';
-            if(el.data().startDate.seconds !== undefined) dateStartTimeStamp =el.data().startDate.seconds * 1000
+            //console.log(el.data())
+            // ??? have to check what is correct! : != undefine or !== 'undefined' or...
+            if(el.data().startDate != null && typeof el.data().startDate.seconds != undefined) dateStartTimeStamp = el.data().startDate.seconds * 1000
+            else {
+                dateStartTimeStamp = -599587564
+                console.log(el.data().firstName + ' ' + el.data().lastName + ' : no sratDate', el.data())
+            }
 
             let dateBirthDateOkTimeStamp = '';
-            if(el.data().startDate.seconds !== undefined) dateBirthDateOkTimeStamp =el.data().birthDate.seconds * 1000
+            if(el.data().birthDate != null && el.data().birthDate.seconds !== undefined) dateBirthDateOkTimeStamp =el.data().birthDate.seconds * 1000
+            else {
+                dateBirthDateOkTimeStamp = -599587564
+                console.log(el.data().firstName + ' ' + el.data().lastName + ' : no sratDate', el.data())
+            }
 
             let libDep = ''
             /*depts.forEach((el2) => { this is no good, because we canot do break in a forEach when item found....
