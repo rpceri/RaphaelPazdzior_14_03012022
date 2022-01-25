@@ -184,7 +184,7 @@ function PageIndex() {
             <h1>HR.net</h1>
         </div>
         <div className="container"> 
-            <img src={`${process.env.PUBLIC_URL}/medias/wealthHealth.jpg`} className="logo" title="wealthHealth" alt="wealthHealth" />
+            <img src={`${process.env.PUBLIC_URL}/medias/wealthHealth180.gif`} className="logo" title="wealthHealth" alt="wealthHealth" />
             <Link className="link" to='/employeeList'>View Current Employees</Link>
             <h2>Create Employee</h2>
             <form className="container2">
@@ -198,10 +198,10 @@ function PageIndex() {
                     {lastNameError ? <div className="form-error">{lastNameError}</div> : null}
 
                     <label htmlFor="date-of-birth">Date of Birth</label>
-                    <DatePicker selected={birthDate} onChange={(date) => setBirthDate(date)} dateFormat="dd/MM/yyyy" />
+                    <DatePicker id="date-of-birth" selected={birthDate} onChange={(date) => setBirthDate(date)} dateFormat="dd/MM/yyyy" />
                     
                     <label htmlFor="start-date">Start Date</label>
-                    <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} dateFormat="dd/MM/yyyy" />
+                    <DatePicker id="start-date" selected={startDate} onChange={(date) => setStartDate(date)} dateFormat="dd/MM/yyyy" />
                 </div>
                 <div className="address">
                     <label htmlFor="street">Street</label>
@@ -238,7 +238,7 @@ function PageIndex() {
                 </div>
             </form>
             <button onClick={handleSubmit}>Save</ button>
-            <Modal isDraggable='1' isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
+            <Modal isDraggable='0' isModalVisible={isModalVisible} message={messageInformation} buttonLabel='Ok' handleModalResponse={handleModalResponse} />
         </div>
 
     </>
