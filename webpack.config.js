@@ -18,8 +18,5 @@ module.exports = {
         headers: {
             'X-Frame-Options': 'sameorigin'
         }
-    },
-    headers: {
-        'X-Frame-Options': 'sameorigin'
     }
 }

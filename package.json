@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.1",
-    "@testing-library/react": "^12.1.2",
-    "@testing-library/user-event": "^13.5.0",
     "esm": "^3.2.25",
     "firebase": "^9.6.1",
     "hrnet-modal-rp": "^1.0.7",
@@ -25,7 +22,8 @@
     "start": "set PORT=3001 &&  react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "liveBuild": "npx serve ./build"
   },
   "eslintConfig": {
     "extends": [
@@ -44,5 +42,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@testing-library/user-event": "^13.5.0",
+    "serve": "^13.0.2"
+  },
+  "homepage": "."
 }
