@@ -1,6 +1,7 @@
 # HRnet - WealthHealth
+
 Convert a project using React instead of jquery
-Old project : https://github.com/OpenClassrooms-Student-Center/P12_Front-end/ (online demo : https://gallant-dijkstra-4b1762.netlify.app/)
+Old jquery project is [here] (https://github.com/OpenClassrooms-Student-Center/P12_Front-end/) (online demo [here] (https://gallant-dijkstra-4b1762.netlify.app/))
 
 ## Dependencies
 
@@ -17,7 +18,7 @@ Old project : https://github.com/OpenClassrooms-Student-Center/P12_Front-end/ (o
 -    "react-table": "^7.7.0" and "styled-components": "^5.3.3", and "match-sorter": "^4.0.0",
 -    "esm": "^3.2.25" (to launch initFirestoreDatabase.js)
 
--    "hrnet-modal-rp": "^1.0.7" (own component)
+-    "hrnet-modal-rp": "^1.0.7" [own component aviable on npmjs.com] (https://www.npmjs.com/package/hrnet-modal-rp)
 
 ## Installation
 
@@ -27,6 +28,6 @@ Old project : https://github.com/OpenClassrooms-Student-Center/P12_Front-end/ (o
 - Run the project :
 `npm start`, will run http://localhost:3001/
 
-## Example
+## Online démo
 
 https://distracted-shockley-ed818d.netlify.app/
